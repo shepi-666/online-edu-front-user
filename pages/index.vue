@@ -6,15 +6,15 @@
     <div v-swiper:mySwiper="swiperOption">
       <div class="swiper-wrapper">
 
-        <div v-for="banner in bannerList" :key="banner.id" class="swiper-slide" style="background: #040B1B;">
+        <div v-for="banner in bannerList" :key="banner.id" class="swiper-slide">
           <a target="_blank" :href="banner.linkUrl">
-            <img :src="banner.imageUrl" :alt="banner.title">
+            <img :src="banner.imageUrl" :alt="banner.title" >
           </a>
         </div>
       </div>
-      <div class="swiper-pagination swiper-pagination-white"></div>
-      <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
-      <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+      <div class="swiper-pagination swiper-pagination-blue"></div>
+      <div class="swiper-button-prev swiper-button-blue" slot="button-prev"></div>
+      <div class="swiper-button-next swiper-button-blue" slot="button-next"></div>
     </div>
     <!-- 幻灯片 结束 -->
     <!-- 幻灯片 结束 -->
