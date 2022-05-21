@@ -33,9 +33,15 @@
                 <a class="c-fff vam" title="收藏" href="#" >收藏</a>
               </span>
             </section>
-            <section class="c-attr-mt">
-              <a href="#" title="立即观看" class="comm-btn c-btn-3">立即观看</a>
+            <section class="c-attr-mt" v-if="isbuy===true || Number(courseInfo.price) === 0">
+              <a title="立即观看" class="comm-btn c-btn-3">立即观看</a>
             </section>
+
+            <section class="c-attr-mt" v-else>
+              <a @click="createOrder()" title="立即购买" class="comm-btn c-btn-3">立即购买</a>
+            </section>
+
+
           </section>
         </aside>
         <aside class="thr-attr-box">
@@ -161,15 +167,50 @@
 
 <script>
   import courseApi from "../../api/course";
+  import orderApi from "../../api/order";
   export default {
-    asyncData({ params, error }) {
-      return courseApi.getCourseInfo(params.id).then(response => {
+    /*asyncData({ params, error }) {
+      return courseApi.getCourseInfo(params.id).then(response => { // 查询当前课程是否已经被用户购买
         console.log(response);
         return {
           courseInfo: response.data.data.courseInfo,
-          chapters: response.data.data.chapters
+          chapters: response.data.data.chapters,
+          courseId: params.id,
+          isBuy: response.data.data.isBuy
         }
       })
+    },*/
+
+    //和页面异步开始的
+    asyncData({ params, error }) {
+      return {courseId: params.id}
+    },
+    data() {
+      return {
+        courseInfo: {},
+        chapters: [],
+        isbuy: false,
+      }
+    },
+    created() {
+      this.initCourseInfo()
+    },
+    methods:{
+      initCourseInfo() {
+        courseApi.getCourseInfo(this.courseId)
+          .then(response => {
+            this.courseInfo=response.data.data.courseInfo,
+            this.chapters=response.data.data.chapters,
+            this.isbuy=response.data.data.isBuy
+          })
+      },
+      createOrder(){
+        courseApi.createOrder(this.courseId).then(response => {
+          if(response.data.success){
+            this.$router.push({ path: '/order/'+ response.data.data.orderId })
+          }
+        })
+      }
     }
   };
 </script>

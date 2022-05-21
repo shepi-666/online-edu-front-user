@@ -66,16 +66,20 @@
         .then(response => {
           // 将token放到cookie中去
           // cookie名称、参数值、作用范围
-          cookie.set("guli_token", response.data.data.token, {domain: 'localhost'})
-          // 调用接口，根据token信息，获取用户的信息，用户首页面的显示
-          loginApi.getLoginInfo()
-          .then(response => {
-            // 获取返回的用户信息，放到cookie中
-            this.loginInfo = response.data.data.userInfo
-            cookie.set("guli_center", JSON.stringify(this.loginInfo),{ domain: "localhost" });
-            // 跳转到登录页面
-            window.location.href = "/"
-          })
+          if (response.data.data.token) {
+            cookie.set("guli_token", response.data.data.token, {domain: 'localhost'})
+            // 调用接口，根据token信息，获取用户的信息，用户首页面的显示
+            loginApi.getLoginInfo()
+              .then(response => {
+                // 获取返回的用户信息，放到cookie中
+                this.loginInfo = response.data.data.userInfo
+                cookie.set("guli_center", JSON.stringify(this.loginInfo),{ domain: "localhost" });
+                // 跳转到登录页面
+                window.location.href = "/"
+              })
+          } else {
+            alert("请检查账号密码是否正确")
+          }
         })
       },
 
